@@ -86,6 +86,7 @@ class PortScanner(NetworkTool):
         # exception and crash the entire thread, and potentially the whole program.
         # Since scan_port is run inside threads, an unhandled exception would silently kill
         # that thread without recording a result, making the scan incomplete and unreliable.
+        sock = None
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(1)
@@ -98,7 +99,8 @@ class PortScanner(NetworkTool):
         except socket.error as e:
             print(f"Error scanning port {port}: {e}")
         finally:
-            sock.close()
+            if sock:
+                sock.close()
 
     def get_open_ports(self):
         """Return only open port results using a list comprehension."""
@@ -222,4 +224,4 @@ if __name__ == "__main__":
 # is in a list of insecure_services, and if so, prints a warning like "WARNING: Telnet is
 # unencrypted and considered insecure." This would help users immediately understand which
 # open ports represent security risks without needing external tools.
-# Diagram: See diagram_studentID.png in the repository root
+# Diagram: See diagram_101581203.png in the repository root
